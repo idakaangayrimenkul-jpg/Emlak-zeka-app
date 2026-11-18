@@ -1,1 +1,1109 @@
+```html
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EmlakZekâ AI | İda Kaan Emlak</title>
+<style>
+  :root {
+    --bg-main: #101114;
+    --bg-card: #1b1c20;
+    --bg-input: #27282e;
+    --border-color: #363840;
+    --gold-primary: #d9b45b;
+    --gold-dark: #a77b29;
+    --gold-border: #8e7139;
+    --text-main: #f0f0f2;
+    --text-muted: #9ca3af;
+    --success: #10b981;
+    --danger: #ef4444;
+    --info: #3b82f6;
+  }
 
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg-main);
+    color: var(--text-main);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: 1.5;
+  }
+
+  header {
+    background: linear-gradient(135deg, #171719 0%, #221f18 100%);
+    padding: 18px 24px;
+    border-bottom: 2px solid var(--gold-dark);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header h1 { color: var(--gold-primary); margin: 0; font-size: 1.6rem; letter-spacing: 0.5px; }
+  header p { color: var(--text-muted); margin: 4px 0 0 0; font-size: 0.9rem; }
+
+  .badge-preview {
+    background: rgba(217, 180, 91, 0.15);
+    border: 1px solid var(--gold-border);
+    color: var(--gold-primary);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  nav {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    padding: 12px 24px;
+    background: #18191d;
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  nav button {
+    background: var(--bg-card);
+    color: var(--gold-primary);
+    border: 1px solid var(--border-color);
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+  }
+  nav button:hover { border-color: var(--gold-border); background: #25262c; }
+  nav button.active {
+    background: var(--gold-dark);
+    color: #fff;
+    border-color: var(--gold-primary);
+    box-shadow: 0 2px 8px rgba(167, 123, 41, 0.35);
+  }
+
+  main { padding: 20px; max-width: 1180px; margin: auto; }
+  section { display: none; animation: fadeIn 0.25s ease; }
+  section.active { display: block; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  h2 { color: var(--gold-primary); margin-top: 0; border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+  h3 { color: #e5c36c; margin-top: 0; font-size: 1.1rem; }
+
+  .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin-bottom: 18px; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: linear-gradient(145deg, #1e1f24, #17181c);
+    border: 1px solid var(--border-color);
+    padding: 18px;
+    border-radius: 12px;
+  }
+  .stat-card small { color: var(--text-muted); display: block; margin-bottom: 6px; font-size: 0.85rem; }
+  .stat-card b { font-size: 1.6rem; color: var(--gold-primary); }
+
+  input, select, textarea {
+    width: 100%;
+    padding: 11px 12px;
+    margin: 6px 0 12px 0;
+    background: var(--bg-input);
+    color: var(--text-main);
+    border: 1px solid #454752;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--gold-primary); }
+  label { font-size: 0.85rem; color: var(--text-muted); font-weight: 500; }
+
+  .btn {
+    background: var(--gold-dark);
+    color: #fff;
+    border: none;
+    padding: 12px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    text-decoration: none;
+    display: inline-block;
+    transition: background 0.2s;
+  }
+  .btn:hover { background: #b88930; }
+  .btn-full { width: 100%; margin-top: 6px; }
+  .btn-sm { padding: 6px 12px; font-size: 0.82rem; border-radius: 6px; }
+  .btn-outline { background: transparent; border: 1px solid var(--gold-border); color: var(--gold-primary); }
+  .btn-outline:hover { background: rgba(217, 180, 91, 0.1); }
+  .btn-danger { background: rgba(239, 68, 68, 0.15); color: #fca5a5; border: 1px solid rgba(239, 68, 68, 0.4); }
+  .btn-danger:hover { background: var(--danger); color: #fff; }
+
+  .item {
+    padding: 14px;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .item:last-child { border-bottom: none; }
+
+  .tag {
+    display: inline-block;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-right: 6px;
+  }
+  .tag-gold { background: rgba(217, 180, 91, 0.2); color: var(--gold-primary); }
+  .tag-green { background: rgba(16, 185, 129, 0.2); color: #6ee7b7; }
+  .tag-blue { background: rgba(59, 130, 246, 0.2); color: #93c5fd; }
+
+  .ai-box {
+    background: #141518;
+    border: 1px dashed var(--gold-border);
+    padding: 16px;
+    border-radius: 10px;
+    white-space: pre-wrap;
+    font-size: 0.92rem;
+    color: #e5e7eb;
+    min-height: 110px;
+  }
+
+  .contract-paper {
+    background: #f9fafb;
+    color: #111827;
+    padding: 24px;
+    border-radius: 8px;
+    font-family: "Times New Roman", serif;
+    line-height: 1.6;
+    border: 1px solid #d1d5db;
+  }
+
+  #toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #22242a;
+    color: #fff;
+    border-left: 4px solid var(--gold-primary);
+    padding: 14px 20px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    display: none;
+    z-index: 999;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>EMLAKZEKÂ AI</h1>
+    <p>Akıllı Emlak Yönetim Sistemi & PropTech CRM | <b>İda Kaan Emlak</b></p>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+    <!-- CANLI OFİS RADYOSU -->
+    <div style="background:#141518;border:1px solid var(--gold-border);padding:6px 12px;border-radius:24px;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:0.95rem;">📻</span>
+      <select id="radioStation" onchange="changeRadioStation()" style="margin:0;padding:4px 8px;font-size:0.8rem;border-radius:12px;width:auto;background:#22242a;border:1px solid #444;">
+        <option value="https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_TURK_SC">JoyTürk (Pop)</option>
+        <option value="https://playerservices.streamtheworld.com/api/livestream-redirect/SUPER_FM_SC">Süper FM</option>
+        <option value="https://playerservices.streamtheworld.com/api/livestream-redirect/JOY_FM_SC">Joy FM (Chill / Ofis)</option>
+        <option value="https://n10101m.mediatriple.net/trt_fm.aac">TRT FM</option>
+        <option value="https://trt.radyotvonline.net/trt_nagme.aac">TRT Nağme (TSM)</option>
+      </select>
+      <button id="radioToggleBtn" onclick="toggleRadio()" class="btn btn-sm" style="padding:4px 10px;border-radius:14px;font-size:0.78rem;">▶ Çal</button>
+      <audio id="officeRadioPlayer" preload="none"></audio>
+    </div>
+    <div class="badge-preview">⚡ v2.0 Akıllı Modüller Aktif</div>
+  </div>
+</header>
+
+<nav id="mainNav">
+  <button class="active" onclick="show('home',this)">🏠 Ana Sayfa</button>
+  <button onclick="show('listings',this)">🏡 Portföy & İlanlar</button>
+  <button onclick="show('customers',this)">👥 Müşteriler</button>
+  <button onclick="show('matching',this)">🤝 Akıllı Eşleştirme</button>
+  <button onclick="show('contracts',this)">📄 Sözleşmeler</button>
+  <button onclick="show('finance',this)">💰 Muhasebe & Komisyon</button>
+  <button onclick="show('mls',this)">🌐 Ortak İlan Havuzu</button>
+  <button onclick="show('analysis',this)">🗺️ Harita & Yatırım</button>
+  <button onclick="show('ai',this)">🤖 AI Danışmanı</button>
+  <button onclick="show('management',this)">⚙️ Yönetim & Mevzuat</button>
+  <a href="https://webtapu.tkgm.gov.tr/" target="_blank" style="background:linear-gradient(135deg,#b88930,#8e661d);color:#fff;border:1px solid #e5c36c;padding:10px 14px;border-radius:8px;text-decoration:none;font-size:0.9rem;font-weight:700;display:inline-flex;align-items:center;gap:6px;margin-left:auto;">🏛️ WebTapu'ya Git ↗</a>
+</nav>
+
+<main>
+  <!-- 1. ANA SAYFA -->
+  <section id="home" class="active">
+    <h2>Yönetim Paneli Özeti</h2>
+    <div class="grid-4">
+      <div class="stat-card"><small>Aktif Portföy</small><b id="listingCount">0</b></div>
+      <div class="stat-card"><small>Kayıtlı Müşteri</small><b id="customerCount">0</b></div>
+      <div class="stat-card"><small>Akıllı Eşleşme</small><b id="matchCount">0</b></div>
+      <div class="stat-card"><small>Net Kasa Bakiyesi</small><b id="netBalance">0 TL</b></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>🚀 Hızlı İşlemler</h3>
+        <p style="color:var(--text-muted);font-size:0.9rem;">Günlük ofis operasyonlarınıza tek tıkla başlayın.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-sm" onclick="navTo('listings')">+ Yeni Portföy Ekle</button>
+          <button class="btn btn-sm" onclick="navTo('customers')">+ Müşteri Talebi Gir</button>
+          <button class="btn btn-sm btn-outline" onclick="navTo('matching')">Eşleşmeleri Gör</button>
+          <a href="https://webtapu.tkgm.gov.tr/" target="_blank" class="btn btn-sm btn-outline">🏛️ WebTapu Başvuru</a>
+          <button class="btn btn-sm btn-outline" onclick="seedDemoData()">Örnek Veri Yükle</button>
+        </div>
+      </div>
+      <div class="card">
+        <h3>📌 Görev ve Hatırlatmalar</h3>
+        <div style="display:flex;gap:8px;">
+          <input id="tTitle" placeholder="Örn: Ahmet Bey'e Zeytinlik yer gösterimi..." style="margin:0;">
+          <input id="tDate" type="date" style="width:160px;margin:0;">
+          <button class="btn btn-sm" onclick="addTask()">Ekle</button>
+        </div>
+        <div id="tasksData" style="margin-top:10px;"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. PORTFÖY VE İLANLAR -->
+  <section id="listings">
+    <h2>Portföy ve İlan Yönetimi</h2>
+    <div class="card">
+      <h3>Yeni Portföy Kaydı</h3>
+      <div class="grid-2">
+        <div>
+          <label>İlan Başlığı</label>
+          <input id="lTitle" placeholder="Örn: Edremit'te Deniz Manzaralı 3+1 Daire">
+        </div>
+        <div>
+          <label>Gayrimenkul Türü</label>
+          <select id="lType">
+            <option>Daire</option><option>Müstakil Ev</option><option>Arsa</option>
+            <option>Tarla</option><option>Zeytinlik</option><option>İşyeri</option>
+          </select>
+        </div>
+        <div>
+          <label>İşlem Türü</label>
+          <select id="lStatus"><option>Satılık</option><option>Kiralık</option></select>
+        </div>
+        <div>
+          <label>İl / İlçe / Mahalle</label>
+          <input id="lLocation" placeholder="Örn: Balıkesir / Edremit / Akçay">
+        </div>
+        <div>
+          <label>Fiyat (TL)</label>
+          <input id="lPrice" type="number" placeholder="Örn: 4500000">
+        </div>
+        <div>
+          <label>Metrekare (m²)</label>
+          <input id="lArea" type="number" placeholder="Örn: 135">
+        </div>
+      </div>
+      <label>Paylaşım İzni (Ortak Havuz)</label>
+      <select id="lShare">
+        <option value="office">Sadece İda Kaan Emlak (Ofis İçi)</option>
+        <option value="mls">Türkiye Geneli Ortak İlan Havuzu (%50-%50 Komisyon)</option>
+      </select>
+      <label>Özellikler & Ada/Parsel Notu</label>
+      <textarea id="lNote" rows="2" placeholder="Oda sayısı, cephe, krediye uygunluk, ağaç sayısı veya imar durumu..."></textarea>
+      <button class="btn btn-full" onclick="addListing()">Portföyü Kaydet ve Eşleştirmeyi Çalıştır</button>
+    </div>
+    <div id="listingsData" class="card"></div>
+  </section>
+
+  <!-- 3. MÜŞTERİLER -->
+  <section id="customers">
+    <h2>Müşteri ve Talep Yönetimi</h2>
+    <div class="card">
+      <h3>Yeni Müşteri / Alıcı Talebi</h3>
+      <div class="grid-2">
+        <div>
+          <label>Ad Soyad</label>
+          <input id="cName" placeholder="Müşteri adı soyadı">
+        </div>
+        <div>
+          <label>Telefon</label>
+          <input id="cPhone" placeholder="05XX XXX XX XX">
+        </div>
+        <div>
+          <label>Talep Türü</label>
+          <select id="cNeed"><option>Satılık</option><option>Kiralık</option></select>
+        </div>
+        <div>
+          <label>Aradığı Gayrimenkul Türü</label>
+          <select id="cPrefType">
+            <option>Daire</option><option>Müstakil Ev</option><option>Arsa</option>
+            <option>Tarla</option><option>Zeytinlik</option><option>İşyeri</option>
+          </select>
+        </div>
+        <div>
+          <label>Tercih Edilen Bölge (İlçe/Mahalle)</label>
+          <input id="cLocation" placeholder="Örn: Edremit veya Akçay">
+        </div>
+        <div>
+          <label>Maksimum Bütçe (TL)</label>
+          <input id="cBudget" type="number" placeholder="Örn: 5000000">
+        </div>
+      </div>
+      <label>Özel Talepler</label>
+      <textarea id="cNote" rows="2" placeholder="Örn: Krediye uygun olsun, bahçeli veya asansörlü..."></textarea>
+      <button class="btn btn-full" onclick="addCustomer()">Müşteriyi Kaydet</button>
+    </div>
+    <div id="customersData" class="card"></div>
+  </section>
+
+  <!-- 4. MÜŞTERİ VE PORTFÖY EŞLEŞTİRME -->
+  <section id="matching">
+    <h2>🤝 Akıllı Müşteri–Portföy Eşleştirme Motoru</h2>
+    <div class="card">
+      <p style="color:var(--text-muted);margin-top:0;">
+        Sistem; kayıtlı müşterilerinizin <b>işlem türü, mülk tipi, bölge</b> ve <b>bütçe (+/- %15 esneme)</b> kriterlerini portföylerinizle otomatik puanlar.
+      </p>
+      <button class="btn btn-sm" onclick="renderMatches()">🔄 Eşleşmeleri Yeniden Tara</button>
+    </div>
+    <div id="matchesData"></div>
+  </section>
+
+  <!-- 5. SÖZLEŞME YÖNETİMİ -->
+  <section id="contracts">
+    <h2>📄 Dijital Sözleşme Yönetimi</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>Otomatik Sözleşme Oluşturucu</h3>
+        <label>Belge Türü</label>
+        <select id="sType">
+          <option>Taşınmaz Yer Gösterme Belgesi</option>
+          <option>Satılık Yetkilendirme Sözleşmesi</option>
+          <option>Kiralık Aracılık Sözleşmesi</option>
+          <option>Alım-Satım ve Kapora Protokolü</option>
+        </select>
+        <label>Müşteri Seçin (veya Ad Yazın)</label>
+        <input id="sName" list="customerListOptions" placeholder="Müşteri adı seçin veya yazın">
+        <datalist id="customerListOptions"></datalist>
+
+        <label>İlgili Portföy</label>
+        <select id="sPortfolio"></select>
+
+        <label>Tarih</label>
+        <input id="sDate" type="date">
+
+        <label>Özel Şartlar / Not</label>
+        <textarea id="sNote" rows="2" placeholder="Kapora miktarı, komisyon oranı veya özel maddeler..."></textarea>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-full" onclick="previewContract()">Önizle</button>
+          <button class="btn btn-full" onclick="addContract()">Kaydet & Arşivle</button>
+        </div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border-color);display:flex;gap:8px;flex-wrap:wrap;">
+          <a href="https://webtapu.tkgm.gov.tr/" target="_blank" class="btn btn-sm btn-outline" style="flex:1;text-align:center;">🏛️ Tapu İşlemi İçin WebTapu'ya Git ↗</a>
+          <a href="https://parselsorgu.tkgm.gov.tr/" target="_blank" class="btn btn-sm btn-outline" style="flex:1;text-align:center;">🗺️ Parsel Sorgula ↗</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Belge Önizleme</h3>
+        <div id="contractPreviewBox" class="contract-paper">
+          <em>Sol taraftan bilgileri doldurup "Önizle" butonuna bastığınızda resmi sözleşme taslağı burada oluşturulacaktır.</em>
+        </div>
+      </div>
+    </div>
+    <div id="contractsData" class="card"></div>
+  </section>
+
+  <!-- 6. GELİR-GİDER MUHASEBESİ & KOMİSYON -->
+  <section id="finance">
+    <h2>💰 Gelir-Gider Muhasebesi ve Komisyon Hesaplama</h2>
+    <div class="grid-4">
+      <div class="stat-card"><small>Toplam Gelir</small><b id="income" style="color:var(--success)">0 TL</b></div>
+      <div class="stat-card"><small>Toplam Gider</small><b id="expense" style="color:var(--danger)">0 TL</b></div>
+      <div class="stat-card"><small>Danışman Prim Payları</small><b id="agentCommissionTotal">0 TL</b></div>
+      <div class="stat-card"><small>Net Ofis Kârı</small><b id="netProfit">0 TL</b></div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>Kasa İşlemi & Komisyon Kaydı</h3>
+        <label>İşlem Türü</label>
+        <select id="fType" onchange="toggleCommissionFields()">
+          <option value="Gelir">Gelir (Satış / Kiralama Hizmet Bedeli)</option>
+          <option value="Gider">Gider (İlan Portalı, Kira, Fatura, Yakıt)</option>
+        </select>
+
+        <label>Tutar (TL)</label>
+        <input id="fAmount" type="number" placeholder="Örn: 120000">
+
+        <div id="commissionSplitBox">
+          <label>Danışman Prim Oranı (%)</label>
+          <select id="fSplit">
+            <option value="0">Paylaşım Yok (%100 Ofis)</option>
+            <option value="50" selected>%50 Ofis - %50 Danışman</option>
+            <option value="40">%60 Ofis - %40 Danışman</option>
+          </select>
+        </div>
+
+        <label>Açıklama / İşlem Detayı</label>
+        <input id="fNote" placeholder="Örn: Akçay 3+1 Daire Satış Komisyonu">
+        <button class="btn btn-full" onclick="addFinance()">Muhasebe Kaydı Ekle</button>
+      </div>
+
+      <div class="card">
+        <h3>Hızlı Hizmet Bedeli (Komisyon) Hesaplayıcı</h3>
+        <label>Satış Fiyatı (TL)</label>
+        <input id="calcSalePrice" type="number" placeholder="Örn: 4000000" oninput="calcCommission()">
+        <label>Komisyon Oranı (Alıcı + Satıcı Toplam %)</label>
+        <select id="calcRate" onchange="calcCommission()">
+          <option value="4">%4 (%2 Alıcı + %2 Satıcı - Standart)</option>
+          <option value="2">%2 (Tek Taraflı)</option>
+          <option value="3">%3 (Özel Anlaşma)</option>
+        </select>
+        <div class="ai-box" id="calcCommissionResult" style="min-height:auto;">
+          Satış tutarı girdiğinizde KDV dahil hizmet bedeli ve danışman hakedişi otomatik hesaplanır.
+        </div>
+      </div>
+    </div>
+    <div id="financeData" class="card"></div>
+  </section>
+
+  <!-- 7. TÜRKİYE GENELİ ORTAK İLAN HAVUZU (MLS) -->
+  <section id="mls">
+    <h2>🌐 Türkiye Geneli Ortak İlan Havuzu (MLS)</h2>
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;">
+        <div>
+          <h3 style="margin:0;">Ofisler Arası Ortak Portföy Ağı</h3>
+          <small style="color:var(--text-muted);">Diğer şehir ve ofislerdeki yetki belgeli portföylere müşteri sunarak %50-%50 komisyon paylaşımı yapın.</small>
+        </div>
+        <select id="mlsCityFilter" style="width:220px;margin:0;" onchange="renderMLS()">
+          <option value="ALL">Tüm Türkiye</option>
+          <option value="Balıkesir">Balıkesir / Edremit</option>
+          <option value="İstanbul">İstanbul</option>
+          <option value="İzmir">İzmir</option>
+          <option value="Muğla">Muğla / Bodrum</option>
+        </select>
+      </div>
+    </div>
+    <div id="mlsData" class="grid-2"></div>
+  </section>
+
+  <!-- 8. HARİTA VE YATIRIM ANALİZLERİ -->
+  <section id="analysis">
+    <h2>🗺️ Harita Konumu ve Yatırım Analizleri</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>📊 Amortisman ve Kira Getirisi Analizi</h3>
+        <label>Gayrimenkul Satış Fiyatı (TL)</label>
+        <input id="invPrice" type="number" value="4200000" oninput="calculateROI()">
+        <label>Aylık Tahmini Kira Getirisi (TL)</label>
+        <input id="invRent" type="number" value="22000" oninput="calculateROI()">
+        <label>Mülk Alanı (m²)</label>
+        <input id="invArea" type="number" value="120" oninput="calculateROI()">
+        <div class="ai-box" id="roiResult" style="min-height:auto;"></div>
+      </div>
+
+      <div class="card">
+        <h3>📍 Bölge Haritası & TKGM Parsel Sorgu</h3>
+        <label>Haritada Görüntülenecek Konum</label>
+        <div style="display:flex;gap:8px;">
+          <input id="mapQuery" value="Edremit, Balıkesir" style="margin:0;">
+          <button class="btn btn-sm" onclick="updateMap()">Konuma Git</button>
+        </div>
+        <div style="margin-top:12px;border-radius:8px;overflow:hidden;border:1px solid var(--border-color);">
+          <iframe id="mapFrame" width="100%" height="230" frameborder="0" style="border:0;"
+            src="https://www.openstreetmap.org/export/embed.html?bbox=26.95,39.55,27.08,39.63&layer=mapnik" allowfullscreen>
+          </iframe>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="https://parselsorgu.tkgm.gov.tr/" target="_blank" class="btn btn-sm btn-outline">↗ TKGM Parsel Sorgula</a>
+          <a href="https://webtapu.tkgm.gov.tr/" target="_blank" class="btn btn-sm btn-outline">↗ WebTapu İşlemleri</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. YAPAY ZEKÂ ENTEGRASYONU -->
+  <section id="ai">
+    <h2>🤖 EmlakZekâ AI Asistanı</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>✨ Akıllı İlan Açıklaması Üretici</h3>
+        <label>Portföy Seç (Otomatik Doldur) veya Manuel Yaz</label>
+        <select id="aiPortfolioSelect" onchange="fillAIWithPortfolio()">
+          <option value="">-- Kayıtlı Portföylerden Seçin --</option>
+        </select>
+        <label>Mülk Özellikleri (Kısa Notlar)</label>
+        <textarea id="aiPromptInput" rows="3" placeholder="Örn: Akçay'da denize 200m, 3+1, ara kat, doğalgazlı, krediye uygun, geniş balkonlu daire"></textarea>
+        <label>Metin Tonu</label>
+        <select id="aiTone">
+          <option value="kurumsal">Kurumsal & Güven Verici (Sahibinden / Hepsiemlak)</option>
+          <option value="yatirim">Yatırımcı Odaklı (Getiri & Değer Artışı Vurgulu)</option>
+          <option value="sosyal">Instagram / Sosyal Medya Kısa Tanıtım</option>
+        </select>
+        <button class="btn btn-full" onclick="generateAIDescription()">✨ AI İlan Metni Oluştur</button>
+      </div>
+
+      <div class="card">
+        <h3>📋 AI Çıktısı & Mevzuat Danışmanı</h3>
+        <div class="ai-box" id="aiOutput">Sol taraftan portföy özelliklerini girip "AI İlan Metni Oluştur" butonuna basın veya aşağıdaki hazır hukuk/mevzuat sorularından birini seçin.</div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-outline" onclick="copyAIOutput()">📋 Metni Kopyala</button>
+          <button class="btn btn-sm btn-outline" onclick="askLawAI('kapora')">⚖️ Kapora Kuralları</button>
+          <button class="btn btn-sm btn-outline" onclick="askLawAI('komisyon')">⚖️ Yasal Komisyon Oranı</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. YÖNETİM & MEVZUAT -->
+  <section id="management">
+    <h2>⚙️ Ofis Yönetimi, Yedekleme ve Resmî Bağlantılar</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3>💾 Veri Yedekleme ve Sıfırlama</h3>
+        <p style="color:var(--text-muted);font-size:0.9rem;">Verileriniz şu an tarayıcı hafızasında (LocalStorage) saklanmaktadır. Bilgisayar değişikliğinde veri kaybetmemek için yedek alabilirsiniz.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-sm" onclick="exportBackup()">⬇️ JSON Yedeği İndir</button>
+          <button class="btn btn-sm btn-danger" onclick="clearAllData()">🗑️ Tüm Verileri Sıfırla</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🏛️ Resmî Kurum ve Tapu Bağlantıları</h3>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <a href="https://webtapu.tkgm.gov.tr/" target="_blank" class="btn btn-sm btn-outline">WebTapu Portalı ↗</a>
+          <a href="https://parselsorgu.tkgm.gov.tr/" target="_blank" class="btn btn-sm btn-outline">TKGM Parsel Sorgu ↗</a>
+          <a href="https://ttbs.gtb.gov.tr/" target="_blank" class="btn btn-sm btn-outline">Taşınmaz Ticareti Bilgi Sistemi ↗</a>
+          <a href="https://www.turkiye.gov.tr/" target="_blank" class="btn btn-sm btn-outline">e-Devlet Kapısı ↗</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="toast"></div>
+
+<script>
+  // --- OFİS RADYOSU YÖNETİMİ ---
+  let isRadioPlaying = false;
+
+  function toggleRadio() {
+    const audio = document.getElementById('officeRadioPlayer');
+    const btn = document.getElementById('radioToggleBtn');
+    const stationUrl = document.getElementById('radioStation').value;
+
+    if (!isRadioPlaying) {
+      audio.src = stationUrl;
+      audio.play().then(() => {
+        isRadioPlaying = true;
+        btn.textContent = '⏸ Durdur';
+        btn.style.background = 'var(--success)';
+        toast('📻 Canlı radyo yayını başlatıldı.');
+      }).catch(() => {
+        toast('⚠️ Yayın bağlantısı kurulamadı, lütfen listeden başka bir radyo kanalı seçin.');
+      });
+    } else {
+      audio.pause();
+      isRadioPlaying = false;
+      btn.textContent = '▶ Çal';
+      btn.style.background = 'var(--gold-dark)';
+    }
+  }
+
+  function changeRadioStation() {
+    const audio = document.getElementById('officeRadioPlayer');
+    const btn = document.getElementById('radioToggleBtn');
+    audio.src = document.getElementById('radioStation').value;
+    if (isRadioPlaying) {
+      audio.play().catch(() => toast('⚠️ Kanal değiştirilirken bağlantı hatası oluştu.'));
+      btn.textContent = '⏸ Durdur';
+    }
+  }
+
+  // --- VERİ TABANI YÖNETİMİ ---
+  const keys = ['listings', 'customers', 'contracts', 'finance', 'tasks'];
+  let db = {};
+  keys.forEach(k => {
+    try { db[k] = JSON.parse(localStorage.getItem('ez_' + k)) || []; }
+    catch (e) { db[k] = []; }
+  });
+
+  const sampleMLS = [
+    { id: 'mls1', office: 'Boğaziçi PropTech - İstanbul', city: 'İstanbul', title: 'Kadıköy Bağdat Cad. Yakını 3+1 Lüks Daire', type: 'Daire', status: 'Satılık', price: 14500000, area: 145, share: '%50 - %50' },
+    { id: 'mls2', office: 'Ege Vizyon Emlak - İzmir', city: 'İzmir', title: 'Urla Kekliktepe İmarlı Müstakil Villa Arsası', type: 'Arsa', status: 'Satılık', price: 9800000, area: 500, share: '%50 - %50' },
+    { id: 'mls3', office: 'Körfez Yatırım - Balıkesir', city: 'Balıkesir', title: 'Burhaniye Pelitköy Yola Cepheli 8 Dönüm Zeytinlik', type: 'Zeytinlik', status: 'Satılık', price: 6200000, area: 8000, share: '%50 - %50' },
+    { id: 'mls4', office: 'Bodrum Peninsula - Muğla', city: 'Muğla', title: 'Yalıkavak Deniz Manzaralı Taş Müstakil Ev', type: 'Müstakil Ev', status: 'Satılık', price: 22000000, area: 210, share: '%50 - %50' }
+  ];
+
+  function save(k) {
+    localStorage.setItem('ez_' + k, JSON.stringify(db[k]));
+    render();
+  }
+
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.style.display = 'block';
+    setTimeout(() => { t.style.display = 'none'; }, 3200);
+  }
+
+  function show(id, btn) {
+    document.querySelectorAll('main section').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+  }
+
+  function navTo(sectionId) {
+    const btn = Array.from(document.querySelectorAll('nav button')).find(b => b.getAttribute('onclick').includes(sectionId));
+    show(sectionId, btn);
+  }
+
+  function escapeHTML(v) {
+    return String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  function formatTL(num) {
+    return Number(num || 0).toLocaleString('tr-TR') + ' TL';
+  }
+
+  // --- KAYIT EKLEME FONKSİYONLARI ---
+  function addListing() {
+    const title = lTitle.value.trim();
+    const price = Number(lPrice.value);
+    if (!title || !price) return toast('Lütfen ilan başlığı ve fiyat giriniz.');
+    db.listings.push({
+      id: Date.now(),
+      title,
+      type: lType.value,
+      status: lStatus.value,
+      location: lLocation.value.trim() || 'Belirtilmedi',
+      price,
+      area: Number(lArea.value) || 0,
+      share: lShare.value,
+      note: lNote.value.trim()
+    });
+    save('listings');
+    ['lTitle', 'lLocation', 'lPrice', 'lArea', 'lNote'].forEach(id => document.getElementById(id).value = '');
+    toast('Portföy kaydedildi ve eşleştirme motoru güncellendi!');
+  }
+
+  function addCustomer() {
+    const name = cName.value.trim();
+    if (!name) return toast('Lütfen müşteri adı giriniz.');
+    db.customers.push({
+      id: Date.now(),
+      name,
+      phone: cPhone.value.trim(),
+      need: cNeed.value,
+      prefType: cPrefType.value,
+      location: cLocation.value.trim(),
+      budget: Number(cBudget.value) || 0,
+      note: cNote.value.trim()
+    });
+    save('customers');
+    ['cName', 'cPhone', 'cLocation', 'cBudget', 'cNote'].forEach(id => document.getElementById(id).value = '');
+    toast('Müşteri talebi kaydedildi!');
+  }
+
+  function addContract() {
+    const name = sName.value.trim();
+    if (!name) return toast('Lütfen müşteri adı giriniz.');
+    db.contracts.push({
+      name,
+      type: sType.value,
+      portfolio: sPortfolio.value || 'Genel Portföy',
+      date: sDate.value || new Date().toISOString().slice(0, 10),
+      note: sNote.value.trim()
+    });
+    save('contracts');
+    toast('Sözleşme arşivlendi!');
+  }
+
+  function previewContract() {
+    const name = escapeHTML(sName.value.trim() || '........................................');
+    const type = escapeHTML(sType.value);
+    const portfolio = escapeHTML(sPortfolio.value || 'Belirtilen Taşınmaz');
+    const date = escapeHTML(sDate.value || new Date().toLocaleDateString('tr-TR'));
+    const note = escapeHTML(sNote.value.trim() || 'Standart Taşınmaz Ticareti Yönetmeliği hükümleri geçerlidir.');
+
+    document.getElementById('contractPreviewBox').innerHTML = `
+      <div style="text-align:center;border-bottom:2px solid #111;padding-bottom:8px;margin-bottom:12px;">
+        <strong>İDA KAAN EMLAK & GAYRİMENKUL DANIŞMANLIĞI</strong><br>
+        <span style="font-size:1.1rem;font-weight:bold;">${type.toUpperCase()}</span>
+      </div>
+      <p><b>Tarih:</b> ${date}</p>
+      <p><b>Müşteri / İş Sahibi:</b> ${name}</p>
+      <p><b>Konu Taşınmaz:</b> ${portfolio}</p>
+      <p><b>Özel Şartlar & Notlar:</b> ${note}</p>
+      <p style="font-size:0.85rem;color:#374151;">İşbu belge 2 nüsha olarak düzenlenmiş olup taraflarca okunarak imza altına alınmıştır.</p>
+      <div style="display:flex;justify-content:space-between;margin-top:24px;padding-top:12px;">
+        <div><b>İda Kaan Emlak</b><br><small>Yetkili Danışman İmza / Kaşe</small></div>
+        <div><b>Müşteri</b><br><small>${name}</small></div>
+      </div>
+    `;
+  }
+
+  function addFinance() {
+    const amount = Number(fAmount.value);
+    if (!amount) return toast('Lütfen geçerli bir tutar giriniz.');
+    const type = fType.value;
+    const splitRate = type === 'Gelir' ? Number(fSplit.value) : 0;
+    const agentShare = Math.round(amount * (splitRate / 100));
+
+    db.finance.push({
+      type,
+      amount,
+      agentShare,
+      note: fNote.value.trim() || (type === 'Gelir' ? 'Hizmet Bedeli' : 'Ofis Gideri'),
+      date: new Date().toLocaleDateString('tr-TR')
+    });
+    save('finance');
+    fAmount.value = '';
+    fNote.value = '';
+    toast('Muhasebe kaydı işlendi.');
+  }
+
+  function toggleCommissionFields() {
+    document.getElementById('commissionSplitBox').style.display = fType.value === 'Gelir' ? 'block' : 'none';
+  }
+
+  function calcCommission() {
+    const price = Number(calcSalePrice.value);
+    const rate = Number(calcRate.value);
+    if (!price) return;
+    const baseFee = price * (rate / 100);
+    const kdv = baseFee * 0.20;
+    const total = baseFee + kdv;
+    document.getElementById('calcCommissionResult').innerHTML =
+      `<b>Hizmet Bedeli (KDV Hariç):</b> ${formatTL(baseFee)}\n` +
+      `<b>KDV (%20):</b> ${formatTL(kdv)}\n` +
+      `<b>Toplam Tahsilat:</b> <span style="color:var(--gold-primary);font-weight:bold;">${formatTL(total)}</span>\n` +
+      `<b>%50 Danışman Hakedişi:</b> ${formatTL(baseFee * 0.5)}`;
+  }
+
+  function addTask() {
+    const title = tTitle.value.trim();
+    if (!title) return toast('Görev açıklaması yazın.');
+    db.tasks.push({ title, date: tDate.value || 'Bugün' });
+    save('tasks');
+    tTitle.value = '';
+  }
+
+  function removeItem(k, i) {
+    db[k].splice(i, 1);
+    save(k);
+    toast('Kayıt silindi.');
+  }
+
+  // --- AKILLI EŞLEŞTİRME ALGORİTMASI ---
+  function computeMatches() {
+    let matches = [];
+    db.customers.forEach(c => {
+      db.listings.forEach(l => {
+        let score = 0;
+        let reasons = [];
+
+        if (c.need === l.status) { score += 30; reasons.push('İşlem Türü Uyumu'); }
+        else return;
+
+        if (c.prefType === l.type) { score += 30; reasons.push('Mülk Tipi'); }
+
+        if (c.location && l.location.toLowerCase().includes(c.location.toLowerCase())) {
+          score += 20; reasons.push('Bölge Uyumu');
+        }
+
+        if (c.budget > 0 && l.price <= c.budget * 1.15) {
+          score += 20;
+          reasons.push(l.price <= c.budget ? 'Tam Bütçe' : 'Bütçeye Yakın (+%15)');
+        }
+
+        if (score >= 50) {
+          matches.push({ customer: c, listing: l, score, reasons });
+        }
+      });
+    });
+    return matches.sort((a, b) => b.score - a.score);
+  }
+
+  function renderMatches() {
+    const matches = computeMatches();
+    document.getElementById('matchCount').textContent = matches.length;
+    const container = document.getElementById('matchesData');
+    if (!matches.length) {
+      container.innerHTML = '<div class="card">Henüz %50 üzeri eşleşme bulunamadı. Portföy ve müşteri talebi ekledikçe burada otomatik listelenecektir.</div>';
+      return;
+    }
+    container.innerHTML = matches.map(m => `
+      <div class="card" style="border-left:4px solid var(--success);">
+        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+          <div>
+            <span class="tag tag-green">%${m.score} UYUM</span>
+            <b>${escapeHTML(m.customer.name)}</b> (${escapeHTML(m.customer.phone || 'Tel yok')})
+          </div>
+          <small>${m.reasons.join(' • ')}</small>
+        </div>
+        <p style="margin:8px 0;">
+          Önerilen Portföy: <b style="color:var(--gold-primary)">${escapeHTML(m.listing.title)}</b> — ${escapeHTML(m.listing.location)} (${formatTL(m.listing.price)})
+        </p>
+        <button class="btn btn-sm btn-outline" onclick="prepareContractFromMatch('${escapeHTML(m.customer.name)}','${escapeHTML(m.listing.title)}')">📄 Yer Gösterme Belgesi Hazırla</button>
+      </div>
+    `).join('');
+  }
+
+  function prepareContractFromMatch(customerName, listingTitle) {
+    navTo('contracts');
+    sType.value = 'Taşınmaz Yer Gösterme Belgesi';
+    sName.value = customerName;
+    sPortfolio.value = listingTitle;
+    sDate.value = new Date().toISOString().slice(0, 10);
+    previewContract();
+    toast('Yer gösterme belgesi taslağı hazırlandı!');
+  }
+
+  // --- ORTAK İLAN HAVUZU (MLS) ---
+  function renderMLS() {
+    const filter = document.getElementById('mlsCityFilter').value;
+    const ownMLS = db.listings.filter(l => l.share === 'mls').map(l => ({
+      office: 'İda Kaan Emlak (Sizin İlanınız)',
+      city: l.location,
+      title: l.title,
+      type: l.type,
+      status: l.status,
+      price: l.price,
+      area: l.area,
+      share: '%50 - %50'
+    }));
+    const allMLS = [...ownMLS, ...sampleMLS].filter(item => filter === 'ALL' || item.city.toLowerCase().includes(filter.toLowerCase()));
+
+    document.getElementById('mlsData').innerHTML = allMLS.map(item => `
+      <div class="card">
+        <span class="tag tag-blue">🌐 Ortak Havuz</span>
+        <span class="tag tag-gold">${escapeHTML(item.type)}</span>
+        <h3 style="margin-top:8px;">${escapeHTML(item.title)}</h3>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin:4px 0;">📍 ${escapeHTML(item.city)} | 📐 ${item.area} m²</p>
+        <p style="font-size:1.1rem;font-weight:bold;color:var(--gold-primary);margin:6px 0;">${formatTL(item.price)}</p>
+        <small>Ofis: ${escapeHTML(item.office)} • Paylaşım: ${item.share}</small><br><br>
+        <button class="btn btn-sm btn-outline" onclick="toast('Ortak işlem talebi ${escapeHTML(item.office)} ofisine iletildi!')">🤝 Ortak Satış / Müşteri Sun</button>
+      </div>
+    `).join('');
+  }
+
+  // --- HARİTA VE YATIRIM ANALİZİ ---
+  function calculateROI() {
+    const price = Number(invPrice.value) || 0;
+    const rent = Number(invRent.value) || 0;
+    const area = Number(invArea.value) || 1;
+    if (!price || !rent) return;
+
+    const annualRent = rent * 12;
+    const years = (price / annualRent).toFixed(1);
+    const yieldRate = ((annualRent / price) * 100).toFixed(2);
+    const sqmPrice = Math.round(price / area);
+
+    let verdict = years <= 15 ? '🟢 Çok Cazip Yatırım (Hızlı Amortisman)' : (years <= 20 ? '🟡 Standart Piyasa Ortalaması' : '🟠 Uzun Vadeli Değer Artışı Odaklı');
+
+    document.getElementById('roiResult').innerHTML =
+      `<b>Yıllık Kira Getirisi:</b> ${formatTL(annualRent)}\n` +
+      `<b>Amortisman (Geri Dönüş) Süresi:</b> <span style="color:var(--gold-primary);font-size:1.1rem;">${years} Yıl</span>\n` +
+      `<b>Yıllık Kira Çarpanı Verimi:</b> %${yieldRate}\n` +
+      `<b>Birim m² Fiyatı:</b> ${formatTL(sqmPrice)} / m²\n` +
+      `<b>Analiz Sonucu:</b> ${verdict}`;
+  }
+
+  function updateMap() {
+    const q = encodeURIComponent(document.getElementById('mapQuery').value || 'Edremit');
+    document.getElementById('mapFrame').src = `https://maps.google.com/maps?q=${q}&t=&z=13&ie=UTF8&iwloc=&output=embed`;
+  }
+
+  // --- YAPAY ZEKÂ ENTEGRASYONU ---
+  function fillAIWithPortfolio() {
+    const idx = document.getElementById('aiPortfolioSelect').value;
+    if (idx === '') return;
+    const p = db.listings[idx];
+    document.getElementById('aiPromptInput').value = `${p.location} bölgesinde ${p.status} ${p.type}. Başlık: ${p.title}. Alan: ${p.area} m², Fiyat: ${formatTL(p.price)}. Özellikler: ${p.note}`;
+  }
+
+  function generateAIDescription() {
+    const info = document.getElementById('aiPromptInput').value.trim();
+    const tone = document.getElementById('aiTone').value;
+    if (!info) return toast('Lütfen mülk özelliklerini yazın veya portföy seçin.');
+
+    let text = '';
+    if (tone === 'kurumsal') {
+      text = `🏡 İDA KAAN EMLAK GÜVENCESİYLE FIRSAT PORTFÖY\n\n` +
+             `📍 Konum ve Genel Özellikler:\n${info}\n\n` +
+             `✨ Öne Çıkan Avantajlar:\n` +
+             `• Bölgenin en çok tercih edilen lokasyonunda, değer artışı yüksek konum\n` +
+             `• Resmi evrakları tam, satışa ve tapu devrine hazır\n` +
+             `• Profesyonel danışmanlık ve şeffaf pazarlık süreci\n\n` +
+             `📞 Detaylı bilgi ve yerinde sunum için İda Kaan Emlak ile iletişime geçebilirsiniz.`;
+    } else if (tone === 'yatirim') {
+      text = `📈 YATIRIMCISINA KAZANDIRAN YÜKSEK GETİRİLİ PORTFÖY\n\n` +
+             `Bölge ortalamasının altında birim maliyeti ve yüksek kira/değer artış potansiyeli ile öne çıkan mülkümüz satışa sunulmuştur.\n\n` +
+             `Detaylar: ${info}\n\n` +
+             `💡 Neden Bu Mülk?\nKısa amortisman süresi ve bölgedeki altyapı projeleri sayesinde orta-uzun vadede yüksek sermaye kazancı sağlar.\n\nİda Kaan Emlak Yatırım Danışmanlığı`;
+    } else {
+      text = `✨ Yeni Portföyümüz Yayında! ✨\n\n${info}\n\n🔑 Hayalinizdeki gayrimenkule bir adım daha yaklaşın. Yerinde görmek ve detaylı bilgi almak için DM veya telefonla bize ulaşın! 📲\n\n#İdaKaanEmlak #EmlakZekaAI #Gayrimenkul #Yatırım #Satılık`;
+    }
+    document.getElementById('aiOutput').textContent = text;
+    toast('AI ilan açıklaması oluşturuldu!');
+  }
+
+  function askLawAI(topic) {
+    if (topic === 'kapora') {
+      document.getElementById('aiOutput').textContent =
+        `⚖️ TAŞINMAZ TİCARETİ YÖNETMELİĞİ — KAPORA (CAYMA AKÇESİ) BİLGİSİ:\n\n` +
+        `1. Alım-satım aracılık sözleşmesi imzalanmadan kapora alınmamalıdır.\n` +
+        `2. Alıcı vazgeçerse kapora satıcıya kalır; satıcı vazgeçerse kaporayı iade eder (sözleşmede aksi kararlaştırılmadıkça).\n` +
+        `3. Kredi çıkmaması durumunda kaporanın iade edileceğine dair şerh düşülmesi hukuki ihtilafları önler.`;
+    } else {
+      document.getElementById('aiOutput').textContent =
+        `⚖️ YASAL HİZMET BEDELİ (KOMİSYON) ORANLARI:\n\n` +
+        `• Alım-Satım İşlemlerinde: Satış bedelinin en fazla %4'ü + KDV (%2 Alıcı + %2 Satıcı) alınabilir.\n` +
+        `• Kiralama İşlemlerinde: En fazla 1 aylık kira bedeli + KDV hizmet bedeli alınabilir.\n` +
+        `• Yer Gösterme Belgesi için hiçbir ücret talep edilemez.`;
+    }
+  }
+
+  function copyAIOutput() {
+    const el = document.getElementById('aiOutput');
+    const ta = document.createElement('textarea');
+    ta.value = el.textContent;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+    toast('Metin panoya kopyalandı!');
+  }
+
+  // --- YEDEKLEME & DEMO VERİ ---
+  function seedDemoData() {
+    if (db.listings.length > 0) return toast('Sistemde zaten kayıtlı veriler bulunuyor.');
+    db.listings = [
+      { id: 1, title: 'Akçay Sahile 150m 3+1 Geniş Daire', type: 'Daire', status: 'Satılık', location: 'Balıkesir / Edremit / Akçay', price: 4350000, area: 130, share: 'mls', note: 'Asansörlü, krediye uygun, güney cephe.' },
+      { id: 2, title: 'Zeytinli Altınkum 5 Dönüm Bakımlı Zeytinlik', type: 'Zeytinlik', status: 'Satılık', location: 'Balıkesir / Edremit / Zeytinli', price: 3800000, area: 5000, share: 'office', note: '110 adet verimli ağaç, kadastro yoluna cephe.' }
+    ];
+    db.customers = [
+      { id: 1, name: 'Mehmet Yılmaz', phone: '0532 444 55 66', need: 'Satılık', prefType: 'Daire', location: 'Edremit', budget: 4500000, note: 'Akçay bölgesinde 3+1 daire arıyor.' },
+      { id: 2, name: 'Ayşe Demir', phone: '0542 333 22 11', need: 'Satılık', prefType: 'Zeytinlik', location: 'Edremit', budget: 4000000, note: 'Yatırımlık zeytinlik talebi.' }
+    ];
+    db.finance = [
+      { type: 'Gelir', amount: 85000, agentShare: 42500, note: 'Güre 2+1 Daire Satış Komisyonu', date: '15.11.2026' },
+      { type: 'Gider', amount: 12000, agentShare: 0, note: 'İlan Portalı Kurumsal Üyelik', date: '16.11.2026' }
+    ];
+    keys.forEach(k => localStorage.setItem('ez_' + k, JSON.stringify(db[k])));
+    render();
+    toast('İda Kaan Emlak demo verileri yüklendi!');
+  }
+
+  function exportBackup() {
+    const blob = new Blob([JSON.stringify(db, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'emlakzeka_yedek_' + new Date().toISOString().slice(0, 10) + '.json';
+    a.click();
+    toast('Yedek dosyası indirildi.');
+  }
+
+  function clearAllData() {
+    keys.forEach(k => { db[k] = []; localStorage.removeItem('ez_' + k); });
+    render();
+    toast('Tüm veriler sıfırlandı.');
+  }
+
+  // --- EKRAN GÜNCELLEME (RENDER) ---
+  function render() {
+    document.getElementById('listingsData').innerHTML = db.listings.map((d, i) => `
+      <div class="item">
+        <div>
+          <span class="tag tag-gold">${escapeHTML(d.status)} • ${escapeHTML(d.type)}</span>
+          ${d.share === 'mls' ? '<span class="tag tag-blue">🌐 Ortak Havuzda</span>' : ''}
+          <b style="font-size:1.05rem;">${escapeHTML(d.title)}</b><br>
+          <small>📍 ${escapeHTML(d.location)} | 📐 ${d.area} m² | 💰 <b style="color:var(--gold-primary)">${formatTL(d.price)}</b></small><br>
+          <small>${escapeHTML(d.note)}</small>
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="removeItem('listings', ${i})">Sil</button>
+      </div>
+    `).join('') || 'Henüz portföy kaydı yok.';
+
+    document.getElementById('customersData').innerHTML = db.customers.map((d, i) => `
+      <div class="item">
+        <div>
+          <span class="tag tag-green">${escapeHTML(d.need)} • ${escapeHTML(d.prefType)}</span>
+          <b>${escapeHTML(d.name)}</b> (${escapeHTML(d.phone || '-')})<br>
+          <small>📍 Tercih: ${escapeHTML(d.location || 'Farketmez')} | 💰 Maks Bütçe: <b>${formatTL(d.budget)}</b></small><br>
+          <small>${escapeHTML(d.note)}</small>
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="removeItem('customers', ${i})">Sil</button>
+      </div>
+    `).join('') || 'Henüz müşteri kaydı yok.';
+
+    document.getElementById('contractsData').innerHTML = db.contracts.map((d, i) => `
+      <div class="item">
+        <div>
+          <span class="tag tag-gold">${escapeHTML(d.type)}</span>
+          <b>${escapeHTML(d.name)}</b> — ${escapeHTML(d.portfolio)}<br>
+          <small>Tarih: ${escapeHTML(d.date)} | ${escapeHTML(d.note)}</small>
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="removeItem('contracts', ${i})">Sil</button>
+      </div>
+    `).join('') || 'Henüz arşivlenmiş sözleşme yok.';
+
+    document.getElementById('financeData').innerHTML = db.finance.map((d, i) => `
+      <div class="item">
+        <div>
+          <span class="tag ${d.type === 'Gelir' ? 'tag-green' : 'tag-gold'}">${escapeHTML(d.type)}</span>
+          <b>${escapeHTML(d.note)}</b> (${escapeHTML(d.date)})<br>
+          <small>Tutar: <b>${formatTL(d.amount)}</b> ${d.agentShare ? `| Danışman Payı: ${formatTL(d.agentShare)}` : ''}</small>
+        </div>
+        <button class="btn btn-sm btn-danger" onclick="removeItem('finance', ${i})">Sil</button>
+      </div>
+    `).join('') || 'Henüz muhasebe kaydı yok.';
+
+    document.getElementById('tasksData').innerHTML = db.tasks.map((d, i) => `
+      <div class="item" style="padding:8px 0;">
+        <span>✅ ${escapeHTML(d.title)} <small>(${escapeHTML(d.date)})</small></span>
+        <button class="btn btn-sm btn-danger" onclick="removeItem('tasks', ${i})">Sil</button>
+      </div>
+    `).join('') || '<small>Bekleyen görev yok.</small>';
+
+    document.getElementById('customerListOptions').innerHTML = db.customers.map(c => `<option value="${escapeHTML(c.name)}">`).join('');
+    document.getElementById('sPortfolio').innerHTML = db.listings.map(l => `<option value="${escapeHTML(l.title)}">${escapeHTML(l.title)} (${formatTL(l.price)})</option>`).join('') || '<option value="">Portföy bulunamadı</option>';
+    document.getElementById('aiPortfolioSelect').innerHTML = '<option value="">-- Kayıtlı Portföylerden Seçin --</option>' + db.listings.map((l, idx) => `<option value="${idx}">${escapeHTML(l.title)}</option>`).join('');
+
+    const inc = db.finance.filter(x => x.type === 'Gelir').reduce((a, b) => a + b.amount, 0);
+    const exp = db.finance.filter(x => x.type === 'Gider').reduce((a, b) => a + b.amount, 0);
+    const agComm = db.finance.reduce((a, b) => a + (b.agentShare || 0), 0);
+    const net = inc - exp - agComm;
+
+    document.getElementById('listingCount').textContent = db.listings.length;
+    document.getElementById('customerCount').textContent = db.customers.length;
+    document.getElementById('income').textContent = formatTL(inc);
+    document.getElementById('expense').textContent = formatTL(exp);
+    document.getElementById('agentCommissionTotal').textContent = formatTL(agComm);
+    document.getElementById('netProfit').textContent = formatTL(net);
+    document.getElementById('netBalance').textContent = formatTL(net);
+
+    renderMatches();
+    renderMLS();
+  }
+
+  render();
+  calculateROI();
+</script>
+</body>
+</html>
+```
